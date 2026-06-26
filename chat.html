@@ -476,7 +476,7 @@
   <script>
     // AI button -> open modal with iframe pointing to requested URL
     (function(){
-      const AI_URL = 'https://claude.ai/new';
+      const AI_URL = 'https://claude.ai/';
       const btn = document.getElementById('btn-ai');
       const modal = document.getElementById('aiModal');
       const closeBtn = document.getElementById('aiClose');
@@ -498,7 +498,7 @@
 
       btn && btn.addEventListener('click', (e)=>{ e.preventDefault(); showModal(); });
       closeBtn && closeBtn.addEventListener('click', hideModal);
-      openNew && openNew.addEventListener('click', ()=>{ window.open(AI_URL, '_blank', 'noopener'); });
+      openNew && openNew.addEventListener('click', ()=>{ window.open('https://claude.ai/new', '_blank', 'noopener'); });
 
       // optional: if embedding is blocked, iframe may stay empty; keep "Open in new tab" available.
       // close modal on ESC
