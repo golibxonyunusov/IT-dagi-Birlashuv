@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Chat</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rubik:wght@400;500;600&display=swap');
+
+    :root{
+      --bg:#0B0E14;
+      --bg2:#11161F;
+      --card:#161D29;
+      --line:#232C3A;
+      --neon:#FFD23F;
+      --neon2:#3FD2FF;
+      --text:#E7EAF0;
+      --muted:#8A94A6;
+    }
+
+    *{box-sizing:border-box;}
+
+    body {
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background: radial-gradient(circle at 20% -10%, #1A2233 0%, var(--bg) 55%);
+      color: var(--text);
+    }
+
+    /* NAVBAR */
+    .navbar {
+      height: 60px;
+      background: rgba(11,14,20,0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      gap: 12px;
+      position: sticky; top: 0; z-index: 60;
+    }
+    .nav-left .brand {
+      color: var(--neon);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,210,63,0.1);
+      color: var(--neon);
+    }
+    .nav-right { display:flex; align-items:center; gap:10px; }
+    .nav-right button {
+      background: var(--neon);
+      color: #1A1303;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 11.5px;
+      letter-spacing: .5px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .nav-right button:hover{ transform: translateY(-1px); box-shadow: 0 4px 14px rgba(255,210,63,.3); }
+    .nav-right button.alt {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .nav-right button.alt:hover{ border-color: var(--neon2); color: var(--neon2); }
+
+    .sidebar {
+      width: 170px;
+      background: var(--bg2);
+      border-right: 1px solid var(--line);
+      height: calc(100vh - 60px);
+      padding-top: 24px;
+      float: left;
+    }
+
+    .sidebar button, .sidebar .btn {
+      display: block;
+      width: 138px;
+      margin: 0 auto 12px;
+      padding: 11px 10px;
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11.5px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, color .15s ease;
+      cursor: pointer;
+    }
+
+    .sidebar .btn:hover, .sidebar button:hover {
+      transform: translateY(-2px);
+      border-color: var(--neon2);
+      color: var(--neon2);
+      box-shadow: 0 8px 18px rgba(63,210,255,.12);
+    }
+    .sidebar .btn:active, .sidebar button:active { transform: translateY(0); }
+    .sidebar .btn.active, .sidebar button.active {
+      background: var(--neon);
+      color: #1A1303;
+      border-color: var(--neon);
+    }
+
+    .chat-container {
+      margin-left: 170px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 60px);
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 18px;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+
+    .chatMessage {
+      background: var(--card);
+      border: 1px solid var(--line);
+      margin: 0 0 10px;
+      padding: 10px 34px 10px 12px;
+      border-radius: 10px;
+      position: relative;
+      word-wrap: break-word;
+      max-width: 70%;
+    }
+
+    .chatMessage .meta {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .chatMessage .meta a{ color: var(--neon2); }
+
+    .chatMessage button {
+      position: absolute;
+      right: 6px;
+      top: 6px;
+      border: none;
+      background: #4A1F24;
+      color: #FF8A8A;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      line-height: 18px;
+      cursor: pointer;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      background: var(--bg2);
+      border-top: 1px solid var(--line);
+      padding: 14px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      font-family: 'Rubik', sans-serif;
+    }
+    .input-area input:focus{ border-color: var(--neon2); }
+
+    .input-area button {
+      width: 130px;
+      background: var(--neon);
+      color: #1A1303;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: .5px;
+    }
+
+    .group-title {
+      padding: 12px 18px;
+      background: var(--bg2);
+      color: var(--neon);
+      border-bottom: 1px solid var(--line);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      letter-spacing: .5px;
+    }
+
+    /* AI ASSISTANT PANEL */
+    .ai-modal {
+      display: none;
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      width: 380px;
+      height: 520px;
+      min-height: 280px;
+      max-height: 88vh;
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      z-index: 9999;
+      box-shadow: 0 20px 50px rgba(0,0,0,.5);
+      resize: vertical;
+      display: none;
+      flex-direction: column;
+    }
+    .ai-modal.open{ display:flex; }
+    .ai-modal .ai-header {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 14px;background:var(--card);border-bottom:1px solid var(--line);
+    }
+    .ai-modal .ai-header strong{
+      font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1px;color:var(--neon2);
+    }
+    .ai-modal .ai-header strong::before{ content:'✦ '; color: var(--neon); }
+    .ai-modal .ai-close{
+      background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;
+    }
+    .ai-modal .ai-close:hover{ color: var(--neon); }
+    .ai-modal .ai-body {
+      flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; background:var(--bg);
+    }
+    .ai-msg{
+      max-width:85%; padding:9px 12px; border-radius:9px; font-size:13.5px; line-height:1.5; white-space:pre-wrap;
+    }
+    .ai-msg.user{ align-self:flex-end; background:var(--neon); color:#1A1303; }
+    .ai-msg.bot{ align-self:flex-start; background:var(--card); border:1px solid var(--line); color:var(--text); }
+    .ai-modal .ai-footer{
+      display:flex; gap:8px; padding:12px; border-top:1px solid var(--line); background:var(--card);
+    }
+    .ai-modal .ai-footer input{
+      flex:1; background:var(--bg); border:1px solid var(--line); color:var(--text);
+      border-radius:8px; padding:9px 12px; outline:none; font-family:'Rubik',sans-serif; font-size:13px;
+    }
+    .ai-modal .ai-footer input:focus{ border-color:var(--neon2); }
+    .ai-modal .ai-footer button{
+      background:var(--neon); color:#1A1303; border:none; border-radius:8px;
+      padding:9px 16px; font-weight:700; cursor:pointer; font-family:'Orbitron',sans-serif; font-size:11.5px;
+    }
+    .ai-fab{
+      position:fixed; right:18px; bottom:18px; z-index:9998;
+      width:56px;height:56px;border-radius:50%;
+      background:linear-gradient(135deg, var(--neon), var(--neon2));
+      border:none; cursor:pointer; font-size:22px;
+      box-shadow:0 10px 26px rgba(255,210,63,.3);
+      transition: transform .15s;
+    }
+    .ai-fab:hover{ transform: scale(1.07); }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="index.html" class="brand">Browser</a>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html" id="link-home" class="active">Home</a>
+      <a href="web.html" id="link-web">Web</a>
+      <a href="Game.html" id="link-game">Game</a>
+      <a href="help.html" id="link-help">Help</a>
+    </div>
+
+    <div class="nav-right">
+  <button id="loginBtn" class="alt">Login</button>
+  <button id="logoutBtn" style="display:none">Logout</button>
+  <span id="displayName" title="Click to change" style="margin-left:8px; color:yellow; cursor:pointer; font-weight:600;"></span>
+    </div>
+  </nav>
+
+  <div class="sidebar">
+  <button id="btn-dasturchilar" class="btn" onclick="showGroup('dasturchilar')">Dasturchilar</button>
+  <a id="btn-videochat" class="btn" href="videochat.html">Videochat</a>
+  </div>
+
+  <div class="chat-container">
+    <div class="group-title" id="groupTitle">Guruh: dasturchilar</div>
+    <div id="chat" class="chat-box"></div>
+
+    <!-- Video chat moved to a separate page: videochat.html -->
+    <div id="videoArea" style="display:none; padding:12px; background:#07182a;">
+      <p style="color:#ccc; padding:12px;">Video chat has been moved to <a href="videochat.html" style="color:yellow">videochat.html</a>. Click the sidebar Videochat button or the link to open it.</p>
+    </div>
+    <div class="input-area">
+      <input type="text" id="myInput" placeholder="So'z yozing" onkeydown="if(event.key==='Enter'){ sendMessage(); }">
+      <button onclick="sendMessage()">Yuborish</button>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs (replace with latest if needed) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    // ✅ Firebase Realtime Database asosidagi real-time chat
+    const firebaseConfig = {
+      apiKey: "AIzaSyC5xBSRqYXhd6HJN9S9v5DQKIlCmLn1mcY",
+      authDomain: "chat-65d82.firebaseapp.com",
+      databaseURL: "https://chat-65d82-default-rtdb.firebaseio.com",
+      projectId: "chat-65d82",
+      storageBucket: "chat-65d82.firebasestorage.app",
+      messagingSenderId: "361206544968",
+      appId: "1:361206544968:web:4944d7e8fdc23c86a7367d"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentGroup = 'dasturchilar';
+    let currentListener = null;
+    const chatEl = document.getElementById('chat');
+    const inputEl = document.getElementById('myInput');
+    const groupTitleEl = document.getElementById('groupTitle');
+
+    let username = localStorage.getItem('chat_username') || '';
+
+    document.getElementById('btn-dasturchilar').classList.add('active');
+
+    function addMessageToDOM(msg, key) {
+      // Agar allaqachon mavjud bo'lsa, qo'shmaymiz
+      if (document.getElementById('msg-' + key)) return;
+
+      // "Hech qanday xabar yo'q" xabarini o'chiramiz
+      const empty = chatEl.querySelector('.empty-msg');
+      if (empty) empty.remove();
+
+      const div = document.createElement('div');
+      div.className = 'chatMessage';
+      div.id = 'msg-' + key;
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+
+      const authorLink = document.createElement('a');
+      authorLink.href = 'profile.html?user=' + encodeURIComponent(msg.sender);
+      authorLink.textContent = msg.sender;
+      authorLink.style.color = '#064';
+      authorLink.style.fontWeight = '700';
+      authorLink.style.marginRight = '8px';
+
+      const timeSpan = document.createElement('span');
+      timeSpan.textContent = ' · ' + new Date(msg.time).toLocaleString();
+
+      meta.appendChild(authorLink);
+      meta.appendChild(timeSpan);
+
+      const text = document.createElement('div');
+      text.textContent = msg.text;
+      text.style.cursor = 'pointer';
+      text.addEventListener('click', () => {
+        window.location.href = 'profile.html?user=' + encodeURIComponent(msg.sender);
+      });
+
+      const del = document.createElement('button');
+      del.textContent = 'x';
+      del.title = "O'chirish";
+      del.onclick = () => deleteMessage(key);
+
+      div.appendChild(meta);
+      div.appendChild(text);
+      div.appendChild(del);
+      chatEl.appendChild(div);
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function listenToGroup(group) {
+      // Avvalgi tinglovchini o'chirish
+      if (currentListener) {
+        db.ref('chats/' + currentListener).off();
+        currentListener = null;
+      }
+
+      chatEl.innerHTML = '<p class="empty-msg" style="color:#444">Yuklanmoqda...</p>';
+      currentListener = group;
+
+      const ref = db.ref('chats/' + group).orderByChild('time').limitToLast(100);
+
+      ref.once('value', snapshot => {
+        chatEl.innerHTML = '';
+        if (!snapshot.exists()) {
+          chatEl.innerHTML = '<p class="empty-msg" style="color:#444">Hech qanday xabar yo\'q. Xabar yozing.</p>';
+        } else {
+          snapshot.forEach(child => {
+            addMessageToDOM(child.val(), child.key);
+          });
+        }
+
+        // Yangi xabarlarni real-time tinglash
+        ref.on('child_added', snapshot => {
+          addMessageToDOM(snapshot.val(), snapshot.key);
+        });
+      });
+
+      // Xabar o'chirilsa DOMdan ham o'chir
+      db.ref('chats/' + group).on('child_removed', snapshot => {
+        const el = document.getElementById('msg-' + snapshot.key);
+        if (el) el.remove();
+        if (chatEl.children.length === 0) {
+          chatEl.innerHTML = '<p class="empty-msg" style="color:#444">Hech qanday xabar yo\'q. Xabar yozing.</p>';
+        }
+      });
+    }
+
+    function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      if (!username) {
+        alert("Avval login qiling!");
+        return;
+      }
+      const message = {
+        sender: username,
+        text: text,
+        time: Date.now()
+      };
+      db.ref('chats/' + currentGroup).push(message);
+      inputEl.value = '';
+    }
+
+    function deleteMessage(key) {
+      db.ref('chats/' + currentGroup + '/' + key).remove();
+    }
+
+    function showGroup(group) {
+      currentGroup = group;
+      groupTitleEl.textContent = 'Guruh: ' + group;
+      document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+      const btn = document.getElementById('btn-' + group);
+      if (btn) btn.classList.add('active');
+      listenToGroup(group);
+    }
+
+    // Auth buttons
+    (function(){
+      const loginBtn = document.getElementById('loginBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      function updateAuthButtons(){
+        const u = localStorage.getItem('chat_username');
+        if (u) {
+          if (loginBtn) loginBtn.style.display = 'none';
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
+          const dn = document.getElementById('displayName');
+          if (dn) { dn.textContent = u; dn.style.cursor = 'pointer'; dn.title = 'Profilni ko\u02b7rish'; }
+        } else {
+          if (loginBtn) loginBtn.style.display = 'inline-block';
+          if (logoutBtn) logoutBtn.style.display = 'none';
+          const dn = document.getElementById('displayName');
+          if (dn) { dn.textContent = ''; dn.style.cursor = 'default'; dn.title = ''; }
+        }
+      }
+
+      if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          const name = prompt('Ismingizni kiriting:') || '';
+          if (name) { localStorage.setItem('chat_username', name); username = name; }
+          updateAuthButtons();
+        });
+      }
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('chat_username');
+          username = '';
+          updateAuthButtons();
+          window.location.href = 'index.html';
+        });
+      }
+      const displayNameEl = document.getElementById('displayName');
+      if (displayNameEl) {
+        displayNameEl.addEventListener('click', () => {
+          const u = localStorage.getItem('chat_username');
+          if (u) window.location.href = 'profile.html?user=' + encodeURIComponent(u);
+        });
+      }
+      updateAuthButtons();
+    })();
+
+    // Boshlang'ich guruhni yuklash
+    listenToGroup(currentGroup);
+  </script>
+
+  <!-- O'z AI yordamchimiz -->
+  <button id="aiFab" class="ai-fab" title="AI yordamchi">✦</button>
+
+  <div id="aiModal" class="ai-modal" role="dialog" aria-hidden="true">
+    <div class="ai-header">
+      <strong>AI Yordamchi</strong>
+      <button id="aiClose" class="ai-close">✕</button>
+    </div>
+    <div class="ai-body" id="aiBody"></div>
+    <div class="ai-footer">
+      <input type="text" id="aiInput" placeholder="Savolingizni yozing...">
+      <button id="aiSend">Yubor</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const fab = document.getElementById('aiFab');
+      const modal = document.getElementById('aiModal');
+      const closeBtn = document.getElementById('aiClose');
+      const body = document.getElementById('aiBody');
+      const input = document.getElementById('aiInput');
+      const sendBtn = document.getElementById('aiSend');
+      let history = [];
+
+      function addMsg(role, text){
+        const d = document.createElement('div');
+        d.className = 'ai-msg ' + (role === 'user' ? 'user' : 'bot');
+        d.textContent = text;
+        body.appendChild(d);
+        body.scrollTop = body.scrollHeight;
+        return d;
+      }
+
+      function openModal(){
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        if (!history.length) addMsg('bot', "Salom! Men sizning yordamchingizman. Nima haqida so'ramoqchisiz?");
+      }
+      function closeModal(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+      }
+
+      fab.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+
+      async function send(){
+        const text = input.value.trim();
+        if (!text) return;
+        addMsg('user', text);
+        history.push({role:'user', content:text});
+        input.value = '';
+        sendBtn.disabled = true;
+        const loadingEl = addMsg('bot', '...');
+        try {
+          const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+              model: "claude-sonnet-4-6",
+              max_tokens: 800,
+              messages: history
+            })
+          });
+          const data = await res.json();
+          const reply = (data.content || []).map(b => b.text || "").join("\n").trim() || "Xatolik yuz berdi.";
+          loadingEl.textContent = reply;
+          history.push({role:'assistant', content:reply});
+        } catch(e) {
+          loadingEl.textContent = 'Xatolik: ' + e.message;
+        }
+        sendBtn.disabled = false;
+      }
+
+      sendBtn.addEventListener('click', send);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    })();
+  </script>
+
+</body>
+</html>
