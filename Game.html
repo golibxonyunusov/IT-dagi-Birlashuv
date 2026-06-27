@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeonForge — O'yinlar</title>
+<style>
+  :root{
+    --bg: #0b0d17;
+    --bg-soft: #121523;
+    --card: #161a2c;
+    --accent: #7c5cff;
+    --accent2: #00e7c1;
+    --text: #e9e8f5;
+    --muted: #8e8aa8;
+    --line: #262b45;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+  h1,h2,h3{
+    font-family: 'Trebuchet MS', Arial, sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* NAV */
+  .nav{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 40px;
+    position: sticky;
+    top:0;
+    z-index: 50;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:bold;
+    font-size:22px;
+    color:var(--text);
+  }
+  .logo-mark{
+    width:34px;height:34px;
+    border-radius:9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    box-shadow: 0 0 16px rgba(124,92,255,0.5);
+  }
+  .logo span{ color: var(--accent2); }
+  .innav{
+    display:flex;
+    align-items:center;
+    gap:28px;
+  }
+  .innav a{
+    color: var(--muted);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:600;
+    transition: color .2s;
+  }
+  .innav a:hover{ color: var(--accent2); }
+  .navB{
+    padding:10px 20px;
+    font-size:15px;
+    font-weight:700;
+    border-radius:30px;
+    border:1px solid var(--accent);
+    background: transparent;
+    color: var(--accent2);
+    cursor:pointer;
+    transition: all .2s;
+  }
+  .navB:hover{
+    background: var(--accent);
+    color:white;
+  }
+
+  /* HERO */
+  .hero{
+    text-align:center;
+    padding: 70px 20px 40px;
+    background: radial-gradient(circle at 50% 0%, rgba(124,92,255,0.18), transparent 60%);
+  }
+  .hero h1{
+    font-size: 44px;
+    margin-bottom: 14px;
+  }
+  .hero h1 .grad{
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .stats{
+    display:flex;
+    justify-content:center;
+    gap: 50px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+  .stat{
+    text-align:center;
+  }
+  .stat .num{
+    font-size: 28px;
+    font-weight:800;
+    color: var(--accent2);
+  }
+  .stat .label{
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* SECTION */
+  .section-title{
+    text-align:center;
+    margin: 60px 0 6px;
+    font-size: 26px;
+  }
+  .section-sub{
+    text-align:center;
+    color: var(--muted);
+    margin-bottom: 36px;
+    font-size: 14px;
+  }
+
+  .game-container{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    gap: 26px;
+    padding: 0 30px;
+  }
+  .card{
+    width: 260px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow:hidden;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(124,92,255,0.25);
+    border-color: var(--accent);
+  }
+  .card img{
+    width:100%;
+    height: 140px;
+    object-fit: cover;
+  }
+  .card-content{
+    padding: 16px;
+  }
+  .tag{
+    display:inline-block;
+    font-size: 11px;
+    font-weight:700;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+  .card h3{
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  .card p.desc{
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+    min-height: 55px;
+  }
+  .btn{
+    display:inline-block;
+    width:100%;
+    text-align:center;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #08091a;
+    font-weight: 700;
+    border:none;
+    padding: 10px 0;
+    border-radius: 8px;
+    cursor:pointer;
+    font-size: 14px;
+    text-decoration:none;
+    box-sizing:border-box;
+  }
+  .btn:hover{ filter: brightness(1.1); }
+
+  /* FOOTER */
+  footer{
+    margin-top: 60px;
+    background: var(--bg-soft);
+    border-top: 1px solid var(--line);
+    text-align:center;
+    padding: 50px 20px;
+  }
+  .footer-container h2{
+    color: var(--accent2);
+    margin-bottom: 12px;
+    font-size: 24px;
+  }
+  .footer-container p{
+    color: var(--muted);
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .footer-links a{
+    color: var(--text);
+    text-decoration:none;
+    margin: 0 14px;
+    font-size: 14px;
+    font-weight:600;
+  }
+  .footer-links a:hover{ color: var(--accent2); }
+
+  @media (max-width: 700px){
+    .nav{ padding: 14px 18px; flex-direction:column; gap:14px; }
+    .innav{ gap:14px; flex-wrap:wrap; justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="logo"><div class="logo-mark">🎮</div>Neon<span>Forge</span></div>
+    <div class="innav">
+      <a href="index.html">Bosh sahifa</a>
+      <a href="web.html">Web</a>
+      <a href="Game.html">O'yinlar</a>
+      <a href="help.html">Yordam</a>
+      <a href="index.html"><button class="navB">Orqaga</button></a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>O'yinlar olamiga <span class="grad">xush kelibsiz</span></h1>
+    <p>Biz sevib o'ynagan o'yinlarni bir joyga to'pladik — sarguzasht, strategiya va simulyatordan tortib, klassik klassikalargacha. Yuklab oling va o'ynashni boshlang.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">8</div><div class="label">O'yinlar</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">Janrlar</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">Bepul tanlov</div></div>
+    </div>
+  </section>
+
+  <h2 class="section-title">🔥 Eng ko'p o'ynalgan</h2>
+  <p class="section-sub">Jamoamiz har kuni bu o'yinlarga qaytadi</p>
+
+  <div class="game-container">
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2527500/header.jpg?t=1761879413" alt="MiSide">
+      <div class="card-content">
+        <span class="tag">Horror</span>
+        <h3>MiSide</h3>
+        <p class="desc">Sirli qiz va g'alati uyni o'rganib chiqishingizga to'g'ri keladigan psixologik dahshat o'yini.</p>
+        <a href="https://store.steampowered.com/app/2527500/MiSide/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2819520/header.jpg?t=1745761718" alt="Viking Rise">
+      <div class="card-content">
+        <span class="tag">Strategiya</span>
+        <h3>Viking Rise</h3>
+        <p class="desc">O'z imperiyangizni qur, qo'shin to'pla va boshqa o'yinchilarga qarshi jang qil.</p>
+        <a href="https://store.steampowered.com/app/2819520/Viking_Rise/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://store-images.s-microsoft.com/image/apps.26021.13510798885735219.b1dc1d11-ab4b-4d8d-832b-53c9622207e3.60aac159-6c05-47b2-92de-c7dc3a2233ac?q=90&w=320&h=180" alt="Minecraft Bedrock">
+      <div class="card-content">
+        <span class="tag">Sandbox</span>
+        <h3>Minecraft (Bedrock)</h3>
+        <p class="desc">Cheksiz dunyoda qurish, qazish va sarguzashtga chiqish — barchamizning sevimli o'yinimiz.</p>
+        <a href="https://www.xbox.com/en-US/games/store/minecraft-for-windows/9nblggh2jhxj?ocid=storeforweb" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://tlauncher.org/assets/images/front_page/settings_versions_en_2_0_v1.png" alt="Minecraft Java">
+      <div class="card-content">
+        <span class="tag">Sandbox</span>
+        <h3>Minecraft (Java)</h3>
+        <p class="desc">Bepul lansher orqali Minecraft Java versiyasini o'ynang, mod va serverlarga ulaning.</p>
+        <a href="https://tlauncher.org/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">🎯 Boshqa sevimlilar</h2>
+  <p class="section-sub">Hayot simulyatori, sport va fantastik sarguzashtlar</p>
+
+  <div class="game-container">
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1222670/header.jpg?t=1760029137" alt="The Sims 4">
+      <div class="card-content">
+        <span class="tag">Simulyator</span>
+        <h3>The Sims 4</h3>
+        <p class="desc">O'z virtual hayotingizni quring — uy, oila, martaba va orzularingizni amalga oshiring.</p>
+        <a href="https://store.steampowered.com/app/1222670/The_Sims_4/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1665460/0fb7eebc292768714f2b3be666d59b59a11b0031/header.jpg?t=1761192425" alt="eFootball">
+      <div class="card-content">
+        <span class="tag">Sport</span>
+        <h3>eFootball</h3>
+        <p class="desc">Sevimli klublaringiz va yulduz futbolchilar bilan haqiqiy futbol tajribasini his eting.</p>
+        <a href="https://store.steampowered.com/app/1665460/eFootball/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2466680/header.jpg?t=1689621318" alt="Kebab Simulator">
+      <div class="card-content">
+        <span class="tag">Simulyator</span>
+        <h3>Kebab Simulator</h3>
+        <p class="desc">O'z kebab do'koningizni ochib, mijozlarga xizmat ko'rsating va biznesingizni rivojlantiring.</p>
+        <a href="https://store.steampowered.com/app/2466680/Kebab_Simulator_Prologue/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/212500/f88dcfdcd0ad3926d90491b31e1b5bcd8eb9a0f3/header_alt_assets_4.jpg?t=1758813057" alt="The Lord of the Rings">
+      <div class="card-content">
+        <span class="tag">MMORPG</span>
+        <h3>The Lord of the Rings</h3>
+        <p class="desc">O'rta yer olamiga sayohat qiling, qahramon yarating va Sauronga qarshi jang qiling.</p>
+        <a href="https://store.steampowered.com/app/212500/The_Lord_of_the_Rings_Online/" target="_blank" class="btn">Yuklab olish</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <h2>NeonForge Gaming</h2>
+      <p>&copy; 2025 NeonForge. Barcha huquqlar himoyalangan. O'yin — bu his-tuyg'u, biz uni siz bilan bo'lishamiz. 🎮</p>
+      <div class="footer-links">
+        <a href="#">Biz haqimizda</a>
+        <a href="help.html">Aloqa</a>
+        <a href="#">Maxfiylik siyosati</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
